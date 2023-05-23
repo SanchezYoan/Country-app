@@ -1,34 +1,35 @@
-const search = document.getElementById('inputSearch')
-const countriesItems = document.getElementById('countriesItems');
-let countries = []
 
-async function fetcher() {
+const countriesContainer = document.querySelector(".countries-container");
+let countriesData = []
+
+async function fetchCountries() {
     await fetch(`https://restcountries.com/v3.1/all`)
     .then((res) => res.json())
-    .then((data) => countries = data);
+    .then((data) => countriesData = data)
+
+    // console.log(countriesData);
+    countriesDisplay();
     
    
 }
 
- countriesDisplay = () => {
-    countriesItems.innertHTML = countries.map((country) => {
-
-    
-        // console.log(countries.map(country))
-        return `
-        <li class="card">
-           
-            <img src=${country.flag} alt="photo ${country.fifa}">
-        </li>
-        `;
-    });
+countriesDisplay = () => {
+    countriesContainer.innertHTML = countriesData.map(
+        (country) => 
+        
+        `
+        <div class="card">
+          <img src=${country.flags.svg} alt="drapeau ${
+        country.translations.fra.common}" > 
+          <h2>${country.translations.fra.common}</h2>
+          <h4>${country.capital}</h4>
+          <p>Population : ${country.population.toLocaleString()}</p>
+        </div>
+      `
+    )
 }
 
-fetcher()
-search.addEventListener('input', (e) => {
-    fetcher(e.target.value)
-})
-// 3 - Passer les données à une variable
+window.addEventListener("load", fetchCountries);
 
 // 4 - Créer une fonction d'affichage, et paramétrer l'affichage des cartes de chaque pays grace à la méthode MAP
 
